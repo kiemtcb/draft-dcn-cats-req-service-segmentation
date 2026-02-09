@@ -310,6 +310,10 @@ the title) for use on http://www.rfc-editor.org/rfcsearch.html. -->
       <t>- CATS Metrics Aggregation:</t>
           <ul spacing="normal">
             <li> CATS metrics can be aggregated not only by metric category (e.g., computing, networking) but also by individual service subtasks. For instance, the CATS metric representing a candidate combination of subtasks may be derived by aggregating the metrics of its component subtasks.  </li>
+
+            <li> One possible realization of such metric aggregation is <em>Service Pipeline Metrics</em>. In this approach, a pipeline-level CATS metric is derived by aggregating the Level 2 service-level metrics of all services within a pipeline into a single pipeline-level metric through an aggregation function, as demonstrated in <xref target="ICTC-2025-Service-Pipeline-metrics"/>. </li>
+
+            <li> Aggregating metrics at the pipeline level can also reduce control-plane signaling overhead by avoiding the need to disseminate fine-grained metrics for each individual service replica. This consideration becomes increasingly important in large-scale 6G deployments, where the number of service replicas within a metro-area cell may grow to the order of hundreds. </li>
           </ul>
 
     </section><!-- End of CATS requirement' -->
@@ -377,6 +381,16 @@ the title) for use on http://www.rfc-editor.org/rfcsearch.html. -->
         <author initials="B." surname="Li" />
         <date month="October" year="2021" />
     </front>
+</reference>
+
+<reference anchor="ICTC-2025-Service-Pipeline-metrics" target="https://doi.org/TO-BE-UPDATED">
+  <front>
+    <title>Optimizing Service Segmentation with Aggregated Computing-Aware Traffic Steering Metrics</title>
+    <author initials="K. N." surname="Trung" />
+    <author initials="M.-N." surname="Tran" />
+    <author initials="Y." surname="Kim" />
+    <date month="January" year="2026" />
+  </front>
 </reference>
 
 <reference anchor="draft-ietf-cats-framework">

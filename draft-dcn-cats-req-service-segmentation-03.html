@@ -28,7 +28,7 @@
     requests 2.25.1
     wcwidth 0.4.0
 -->
-<link href="draft-dcn-cats-req-service-segmentation-02.xml" rel="alternate" type="application/rfc+xml">
+<link href="draft-dcn-cats-req-service-segmentation-03.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
 <style type="text/css">/*
 
@@ -1638,6 +1638,10 @@ li > p:last-of-type:only-child {
 <ul class="normal">
 <li class="normal" id="section-6-8.1"> CATS metrics can be aggregated not only by metric category (e.g., computing, networking) but also by individual service subtasks. For instance, the CATS metric representing a candidate combination of subtasks may be derived by aggregating the metrics of its component subtasks.<a href="#section-6-8.1" class="pilcrow">¶</a>
 </li>
+        <li class="normal" id="section-6-8.2"> One possible realization of such metric aggregation is <em>Service Pipeline Metrics</em>. In this approach, a pipeline-level CATS metric is derived by aggregating the Level 2 service-level metrics of all services within a pipeline into a single pipeline-level metric through an aggregation function, as demonstrated in <span>[<a href="#ICTC-2025-Service-Pipeline-metrics" class="cite xref">ICTC-2025-Service-Pipeline-metrics</a>]</span>.<a href="#section-6-8.2" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-6-8.3"> Aggregating metrics at the pipeline level can also reduce control-plane signaling overhead by avoiding the need to disseminate fine-grained metrics for each individual service replica. This consideration becomes increasingly important in large-scale 6G deployments, where the number of service replicas within a metro-area cell may grow to the order of hundreds.<a href="#section-6-8.3" class="pilcrow">¶</a>
+</li>
       </ul>
 </section>
 </div>
@@ -1673,6 +1677,10 @@ li > p:last-of-type:only-child {
 <dt id="Gillis">[Gillis]</dt>
       <dd>
 <span class="refAuthor">Yu, M.</span>, <span class="refAuthor">Jiang, Z.</span>, <span class="refAuthor">Chun Ng, H.</span>, <span class="refAuthor">Wang, W.</span>, <span class="refAuthor">Chen, R.</span>, and <span class="refAuthor">B. Li</span>, <span class="refTitle">"Gillis: Serving Large Neural Networks in Serverless Functions with Automatic Model Partitioning"</span>, <time datetime="2021-10" class="refDate">October 2021</time>, <span>&lt;<a href="https://doi.org/10.1109/ICDCS51616.2021.00022">https://doi.org/10.1109/ICDCS51616.2021.00022</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="ICTC-2025-Service-Pipeline-metrics">[ICTC-2025-Service-Pipeline-metrics]</dt>
+      <dd>
+<span class="refAuthor">Trung, K. N.</span>, <span class="refAuthor">Tran, M.-N.</span>, and <span class="refAuthor">Y. Kim</span>, <span class="refTitle">"Optimizing Service Segmentation with Aggregated Computing-Aware Traffic Steering Metrics"</span>, <time datetime="2026-01" class="refDate">January 2026</time>, <span>&lt;<a href="https://doi.org/TO-BE-UPDATED">https://doi.org/TO-BE-UPDATED</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="SplitPlace">[SplitPlace]</dt>
       <dd>
