@@ -1,0 +1,440 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- This template is for creating an Internet Draft using xml2rfc,
+    which is available here: http://xml.resource.org. -->
+<!DOCTYPE rfc SYSTEM "rfc2629-xhtml.ent">
+<?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
+<!-- used by XSLT processors -->
+<!-- For a complete list and description of processing instructions (PIs), 
+    please see http://xml.resource.org/authoring/README.html. -->
+<rfc
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      category="info"
+      docName="draft-dcn-cats-req-service-segmentation-03"
+      ipr="trust200902"
+      obsoletes=""
+      updates=""
+      submissionType="IETF"
+      xml:lang="en"
+      tocInclude="true"
+      tocDepth="4"
+      symRefs="true"
+      sortRefs="true"
+      version="3">
+
+  <!-- xml2rfc v2v3 conversion 3.17.4 -->
+<front>
+    <title abbrev="cats-req-service-segmentation">Additional CATS requirements consideration for Service Segmentation-related use cases</title>
+    <seriesInfo name="Internet-Draft" value="draft-dcn-cats-req-service-segmentation-03"/>
+    <author initials="N." surname="Tran" fullname="Minh-Ngoc Tran">
+      <organization> Soongsil University </organization>
+      <address>
+        <postal>
+          <street>369, Sangdo-ro, Dongjak-gu</street>
+          <city>Seoul</city>
+          <code>06978</code>
+          <country>Republic of Korea</country>
+        </postal>
+        <email>mipearlska1307@dcn.ssu.ac.kr</email>
+      </address>
+    </author>
+    <author initials="K." surname="Nguyen-Trung" fullname="Kiem Nguyen Trung">
+      <organization> Soongsil University </organization>
+      <address>
+        <postal>
+          <street>369, Sangdo-ro, Dongjak-gu</street>
+          <city>Seoul</city>
+          <code>06978</code>
+          <country>Republic of Korea</country>
+        </postal>
+        <email>kiemnt@dcn.ssu.ac.kr</email>
+      </address>
+    </author>
+    <author initials="Y." surname="Kim" fullname="Younghan Kim">
+      <organization> Soongsil University </organization>
+      <address>
+        <postal>
+          <street>369, Sangdo-ro, Dongjak-gu</street>
+          <city>Seoul</city>
+          <code>06978</code>
+          <country>Republic of Korea</country>
+        </postal>
+        <phone>+82 10 2691 0904</phone>
+        <email>younghak@ssu.ac.kr</email>
+      </address>
+    </author>
+    <date year="2025"/>
+    <workgroup>cats</workgroup>
+    <!-- [rfced] Please insert any keywords (beyond those that appear in
+the title) for use on http://www.rfc-editor.org/rfcsearch.html. -->
+    <keyword>Internet-Draft</keyword>
+    <abstract>
+      <t>This document discusses possible additional CATS requirements when considering service segmentation in related CATS use cases such as AR-VR and Distributed AI Inference</t>
+    </abstract>
+  </front>
+
+  <middle>
+    <section anchor="introduction">
+      <name>Introduction</name>
+
+      <t>Service segmentation is a service deployment option that splits the service into smaller subtasks which can be executed in parallel or in sequence before the subtasks execution results are aggregated to serve the service request <xref target="draft-li-cats-task-segmentation-framework"/>. It is an interesting service deployment option that is widely considered to improve the performance of several services such as AR-VR or Distributed AI Inference which are also key CATS use cases <xref target="draft-ietf-cats-usecases-requirements"/>.</t>
+
+      <t>For example, a recent 3GPP Technical Report on 6G use cases and services <xref target="TR-22870-3GPP"/> describes an XR rendering service that can be implemented as a sequential pipeline of subtasks, including a render engine, engine adaptation, and rendering acceleration. In contrast, an example of parallel service segmentation is parallel Machine Learning (ML) model partitioning for inference <xref target="SplitPlace"/>, <xref target="Gillis"/>. Specifically, a ML model layer can be divided into multiple smaller partitions, which are executed in parallel. In both sequential and parallel segmentation cases, subtask may have multiple instances which are deployed across different computing sites.</t>
+
+      <t>This document analyzes these CATS service segmentation use case examples to discuss the impact of service segmentation deployment method on CATS system design.</t>
+
+    </section><!-- End of section 'Introduction' -->
+
+    <section anchor="terminology">
+      <name>Terminology used in this draft</name>
+
+      <t>This document re-uses the CATS component terminologies which has been defined in <xref target="draft-ietf-cats-framework"/>. Additional definitions related to service segmentation are:</t>
+
+      <t>Service subtask: An offering that performs only a partial funtionality of the original service. The complete functionality of the original service is achieved by aggregating the results of all its divided service subtasks. Subtask result aggregation may be performed either in parallel or sequentially.</t>
+
+      <t>Service subtask instance: When a service is segmented into multiple service subtasks, each service subtask might have multiple instances that performs the same partial functionality of the original service. </t>
+    </section><!-- End of section 'Terminology' -->
+
+
+    <section anchor="example-XR">
+      <name>Example 1: AR-VR (XR) Rendering Sequential Subtask Segmentation</name>
+        <figure anchor="Fig-XR" title="Example of a CATS system in Sequential Service Segmentation case">
+          <artwork align="left" name="" type="" alt=""><![CDATA[
+                      XR Rendering request
+                          +--------+
+                          | Client |
+                          +---|----+
+                              |
+                      +-------|-------+
+                      |   AR-VR(XR)   | 
+                      |  App Platform |
+                      +-------|-------+
+                              |  Supposed Optimal combination:
+                              |  RE Site 1, EA Site 3, RA site 4 
+                              |
+                              |  Forwards packet in ORDER: 
+                              |  Site 1 -> 3 -> 4     
+                        +-----|-----+------+    
++-----------------------|   CATS**  |C-PS  |---------------------+
+|       Underlay        | Forwarder |------+          +-------+  |
+|    Infrastructure     +-----|-----+                 |C-NMA  |  |
+|                             |                       +-------+  |
+|       +---------------+-----+---------+---------------+        |
+|        Various network latency between different links         |
+|       |               |               |               |        |
+|       | /-----------\ | /-----------\ | /-----------\ |        |
++-+-----|/----+---+----\|/----+---+----\|/----+---+----\|-----+--+
+  |   CATS    |   |  CATS     |   |   CATS    |   |   CATS    |       
+  | Forwarder |   | Forwarder |   | Forwarder |   | Forwarder |       
+  +-----|-----+   +-----|-----+   +-----|-----+   +-----|-----+       
+        |               |               |               |             
+  +-----|------+   +----|------+   +----|-------+   +---|--------+       
+  |+----------+|   |+---------+|   |+----------+|   |+----------+|       
+  ||  Render  ||   || Render  ||   || Engine   ||   ||  Render  ||
+  ||  Engine  ||   || Engine  ||   ||Adaptation||   ||Accelerate||
+  |+----------+|   |+---------+|   |+----------+|   |+----------+|  +---+---+
+  |  Optimal   |   |           |   |  Optimal   |   |  Optimal   |  |C-SMA* |
+  |            |   |           |   |            |   |            |  +---+---+
+  |+----------+|   |           |   |+----------+|   |            |      |
+  || Engine   ||   |           |   || Render   ||   |            |      |
+  ||Adaptation||   |           |   ||Accelerate||   |            |      |
+  |+----------+|   |           |   |+----------+|   |            |      |
+  |            |   |           |   |            |   |            |      |
+  +-----|------+   +-----|-----+   +-----|------+   +-----|------+      |
+        +----------------+---------------+----------------+-------------+
+     Service         Service         Service        Service
+      Site 1          Site 2          Site3          Site 4
+                      ]]></artwork>
+        </figure>
+
+      <t><xref target="Fig-XR"/> illustrates how a CATS system should perform optimal traffic steering for an XR rendering service deployed as a sequential pipeline of subtasks, including the render engine, engine adaptation, and rendering acceleration. This example is derived from the corresponding use case in <xref target="TR-22870-3GPP"/>. To return the rendered XR object to the client, the XR rendering request must be processed sequentially in the specified order by the three rendering subtasks. </t>
+
+    <section anchor="example-XR-flow">
+      <name>Expected CATS system flow</name>
+
+          <ul spacing="normal">
+            <li> The client sends an XR rendering request via its connected network to the XR application platform.</li>
+            <li> The XR application platform determines that the request should be processed by the XR rendering pipeline and forwards the packet via its attached CATS Forwarder. </li>
+            <li> The CATS Path Selector (CATS-PS) determines the optimal subtask composition of XR rendering pipeline and selects the most suitable instance for each subtask to steer the request. This selection is based on the current status of computing and network resources at the sites hosting the XR rendering subtask instances. For example, in <xref target="Fig-XR"/>, the sequential pipeline consists of three subtasks: the optimal Render Engine instance is located at Site 1, the optimal Engine Adaptation instance at Site 3, and the optimal Rendering Acceleration instance at Site 4.</li>
+            <li> The CATS-PS configures the CATS Forwarder with routing information that specifies the required processing order: from Site 1 to Site 3 to Site 4.</li>
+            <li> The packet is steered through the CATS underlay infrastructure following the specified routing order and is sequentially processed at the designated service sites.</li>
+            <li> The XR application platforms returns the final processed XR rendering result to the client.</li>
+          </ul>
+
+    </section>
+
+    <section anchor="XR-impact">
+      <name>Impacts on CATS system design</name>
+
+      <ul spacing="normal">
+        <li> A CATS system should provide a method to distinguish different CATS candidate paths corresponding to different service subtask instance combinations (different subtask composition or same subtask composition but different subtask instance location)</li>
+        <li> A CATS system should provide a method to deliver the service request to the determined optimal service subtask instance combination in correct order and correct composition.</li>
+      </ul>
+
+      </section>
+
+    </section><!-- End of Example XR' -->
+
+    <section anchor="example-ML">
+      <name>Example 2: ML Model Vertical Partitioning Inference Parallel Subtask Segmentation</name>
+
+        <figure anchor="Fig-split" title="ML model Vertical Partitioning Illustration">
+          <artwork align="left" name="" type="" alt=""><![CDATA[
+             +-----+             +----------+
+ +-----+     |     |  +-------+  |          |
+ |Input|---> |Layer|--| Layer |--|   Layer  |   Orignal ML Model
+ |     |     |  1  |  | 2 (L2)|  |   3 (L3) |
+ +-----+     |(L1) |  +-------+  +----------+
+             +-----+
+
+
+
+             +-----+             +----------+
+ +-----+     |Split|  +-------+  |          |
+ |Input|---> |  L1 |--|SplitL2|--| Split L3 |   ML Model Slice 1
+ |     |\    +-----+  +-------+  +----------+
+ +-----+ \
+  Split   \  +-----+             
+           > |Split|  +-------+  +----------+
+             |  L1 |--|SplitL2|--| Split L3 |   ML Model Slice 2
+             +-----+  +-------+  +----------+
+                      ]]></artwork>
+        </figure>
+
+        <figure anchor="Fig-ML" title="Example of a CATS system in Parallel Service Segmentation case">
+          <artwork align="left" name="" type="" alt=""><![CDATA[
+                      ML Inference request
+                          +--------+
+                          | Client |
+                          +---|----+
+                              |
+                      +-------|-------+
+   *Merges output from|       ML      | *Divides input corresponding 
+    Slice 1 and 2     |  App Platform |  to Slice 1, 2 input sizes
+    before responding +-------|-------+
+    to Client                 |  
+                              |  
+                              |  Supposed Optimal combination:
+                              |  Slice 1 Site 1, Slice 2 Site 3
+                              |  
+                              |  Forwards packet in PARALLEL:
+                              |  Site 1 & 3
+                        +-----|-----+------+    
++-----------------------|   CATS**  |C-PS  |---------------------+
+|       Underlay        | Forwarder |------+          +-------+  |
+|    Infrastructure     +-----|-----+                 |C-NMA  |  |
+|                             |                       +-------+  |
+|       +---------------+-----+---------+---------------+        |
+|        Various network latency between different links         |
+|       |               |               |               |        |
+|       | /-----------\ | /-----------\ | /-----------\ |        |
++-+-----|/----+---+----\|/----+---+----\|/----+---+----\|-----+--+
+  |   CATS    |   |  CATS     |   |   CATS    |   |   CATS    |       
+  | Forwarder |   | Forwarder |   | Forwarder |   | Forwarder |       
+  +-----|-----+   +-----|-----+   +-----|-----+   +-----|-----+       
+        |               |               |               |             
+  +-----|------+   +----|------+   +----|-------+   +---|--------+       
+  |+----------+|   |+---------+|   |+----------+|   |+----------+|       
+  ||  Model   ||   || Model   ||   ||  Model   ||   ||  Model   ||
+  ||  Slice1  ||   || Slice 1 ||   ||  Slice 2 ||   ||  Slice 2 ||
+  |+----------+|   |+---------+|   |+----------+|   |+----------+|  +---+---+
+  |  Optimal   |   |           |   |  Optimal   |   |            |  |C-SMA* |
+  |            |   |           |   |            |   |            |  +---+---+
+  |            |   |           |   |            |   |            |      |
+  +-----|------+   +-----|-----+   +-----|------+   +-----|------+      |
+        +----------------+---------------+----------------+-------------+
+     Service         Service         Service        Service
+      Site 1          Site 2          Site3          Site 4
+                      ]]></artwork>
+        </figure>
+
+      <t><xref target="Fig-ML"/> illustrates how a CATS system can perform optimal traffic steering for a machine learning (ML) inference service deployed as a parallel pipeline of subtasks, where each subtask corresponds to a vertically partitioned slice of the original ML model. Based on the ML model splitting use cases described in <xref target="SplitPlace"/> and <xref target="Gillis"/>, Figure <xref target="Fig-ML"/> shows how an ML model can be vertically partitioned into slices that are executed in parallel to reduce inference response time. The input inference data from the client should be partitioned according to the input dimensions expected by each model slice. These slices then process their respective inputs in parallel, and the resulting outputs are merged to produce the final inference result, which is returned to the client.</t>
+
+    <section anchor="example-ML-flow">
+      <name>Expected CATS system flow</name>
+
+          <ul spacing="normal">
+            <li> The client sends an ML inference request via its connected network to the ML application platform.</li>
+            <li> The ML application platform determines that the request should be processed by the Vertical ML model partitioning pipeline. </li>
+            <li> The CATS-PS determines the optimal subtask composition for a vertically partitioned machine learning (ML) model pipeline and selects the most suitable instance for each subtask to steer the request. For example, in <xref target="Fig-ML"/>, the ML model is partitioned into two vertical slices: Model Slice 1 is deployed at Service Site 1, and Model Slice 2 is deployed at Service Site 3.</li>
+            <li> The CATS Path Selector (CATS-PS) communicates its pipeline decision to the ML application platform. The platform then pre-processes the client’s inference input into two smaller input slices, based on the input dimensions required by each model slice. </li>
+            <li> Each input slice is forwarded in parallel to its corresponding model slice instance at the designated locations (Site 1 and Site 3). </li>
+            <li> Once the processed outputs are returned from each model slice, the ML application platform merges them to produce the final ML inference result, which is then returned to the client.</li>
+          </ul>
+
+    </section>
+
+    <section anchor="ML-impact">
+      <name>Impacts on CATS system design</name>
+
+      <ul spacing="normal">
+        <li> A CATS system should provide a method to distinguish different CATS candidate paths corresponding to different service subtask instance combinations (different subtask composition or same subtask composition but different subtask instance location)</li>
+        <li> A CATS system should coordinate with the segmented service platform entity to pre-process the original request data into the appropriate input formats required by the determined parallel subtasks.</li>
+      </ul>
+
+      </section>
+
+    </section><!-- End of Example FL' -->
+
+    <section anchor="differences-normal-cats">
+      <name>Differences comparison between Normal and Service Segmentation CATS scenarios</name>
+      <t>In the normal CATS scenario: </t>
+          <ul spacing="normal">
+            <li> The CATS system objective is selecting an optimal service instance to serve a service request</li>
+            <li> Different candidate CATS paths are caused by: service instances' computing and network resources status.</li>
+            <li> The CATS system delivers the service request to the determined optimal service instance</li>
+          </ul>
+      <t>In the Service Segmenatation CATS scenario: </t>
+          <ul spacing="normal">
+            <li> The CATS system objective is selecting an optimal service subtask combination. An optimal combination is composed of the optimal instances of each service subtask. </li>
+            <li> Different candidate CATS paths are caused by: service subtask instances' computing and network resources status, and possible different service segmentation variations (e.g. a service is segmented into different number of subtasks) </li>
+            <li> The CATS system delivers the service request to the determined optimal combination of service subtask instances in correct order (sequence/parallel) and subtask composition.</li>
+          </ul>
+    </section><!-- End of Differences normal CATS' -->
+
+    <section anchor="additional-cats-requirement">
+      <name>CATS system design Consideration points to support Service Segmentation</name>
+      <t>As AR/VR and Distributed AI Inference are among the CATS-supported use cases listed in <xref target="draft-ietf-cats-usecases-requirements"/>, the CATS system should also fully support scenarios where service segmentation is applied to these use cases.</t>
+
+      <t>This section outlines three CATS system design considerations that are not yet addressed in existing CATS WG documents, including the Problem and Requirement document (<xref target="draft-ietf-cats-usecases-requirements"/>), the Framework document (<xref target="draft-ietf-cats-framework"/>), and the Metric Definition document (<xref target="draft-ietf-cats-usecases-requirements"/>):</t>
+
+      <t>- Traffic Steering Objective:</t>
+          <ul spacing="normal">
+            <li> The optimal service instance can be a sequence/parallel pipeline that consists the optimal instances of each subtask composing the service, instead of a single entity providing the complete service functionality, as assumed in the conventional CATS scenario. </li>
+          </ul>
+
+      <t>- Traffic Steering Mechanism:</t>
+          <ul spacing="normal">
+            <li> The CATS system may be required to provide a mechanism to steer service requests in a predetermined sequence, as in the case of sequential service segmentation. </li>
+          </ul>
+
+      <t>- CATS Metrics Aggregation:</t>
+          <ul spacing="normal">
+            <li> CATS metrics can be aggregated not only by metric category (e.g., computing, networking) but also by individual service subtasks. For instance, the CATS metric representing a candidate combination of subtasks may be derived by aggregating the metrics of its component subtasks.  </li>
+          </ul>
+
+    </section><!-- End of CATS requirement' -->
+
+</middle>
+
+<back>
+
+<references title="Normative References">
+
+<reference anchor="draft-li-cats-task-segmentation-framework">
+        <front>
+          <title>A Task Segmentation Framework for Computing-Aware Traffic Steering</title>
+
+          <author initials="C., et al." surname="Li">
+            <organization/>
+          </author>
+       
+          <date month="December" year="2024"/>
+        </front>
+
+        <seriesInfo name="" value="draft-li-cats-task-segmentation-framework"/>
+</reference>
+
+<reference anchor="draft-ietf-cats-usecases-requirements">
+        <front>
+          <title>Computing-Aware Traffic Steering (CATS) Problem Statement, Use Cases, and Requirements</title>
+
+          <author initials="K., et al." surname="Yao">
+            <organization/>
+          </author>
+       
+          <date month="February" year="2025"/>
+        </front>
+
+        <seriesInfo name="" value="draft-ietf-cats-usecases-requirements"/>
+</reference>
+
+<reference anchor="TR-22870-3GPP" target="https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=4374">
+    <front>
+        <title> Study on 6G Use Cases and Service Requirements</title>
+        <author surname="3GPP" />
+        <date month="June" year="2025" />
+    </front>
+</reference>
+
+<reference anchor="SplitPlace" target="https://doi.org/10.1109/TMC.2022.3177569">
+    <front>
+        <title>SplitPlace: AI Augmented Splitting and Placement of Large-Scale Neural Networks in Mobile Edge Environments</title>
+        <author initials="S." surname="Tuli" />
+        <author initials="G." surname="Casale" />
+        <author initials="N." surname="Jennings" />
+        <date month="May" year="2022" />
+    </front>
+</reference>
+
+<reference anchor="Gillis" target="https://doi.org/10.1109/ICDCS51616.2021.00022">
+    <front>
+        <title>Gillis: Serving Large Neural Networks in Serverless Functions with Automatic Model Partitioning</title>
+        <author initials="M." surname="Yu" />
+        <author initials="Z." surname="Jiang" />
+        <author initials="H." surname="Chun Ng" />
+        <author initials="W." surname="Wang" />
+        <author initials="R." surname="Chen" />
+        <author initials="B." surname="Li" />
+        <date month="October" year="2021" />
+    </front>
+</reference>
+
+<reference anchor="draft-ietf-cats-framework">
+        <front>
+          <title>A Framework for Computing-Aware Traffic Steering (CATS)</title>
+
+          <author initials="C., et al." surname="Li">
+            <organization/>
+          </author>
+       
+          <date month="February" year="2025"/>
+        </front>
+
+        <seriesInfo name="" value="draft-ietf-cats-framework"/>
+</reference>
+
+<reference anchor="draft-ietf-cats-metric-definition">
+        <front>
+          <title>CATS Metrics Definition</title>
+
+          <author initials="K., et al." surname="Yao">
+            <organization/>
+          </author>
+       
+          <date month="March" year="2025"/>
+        </front>
+
+        <seriesInfo name="" value="draft-ietf-cats-metric-definition"/>
+</reference>
+
+<reference anchor="draft-ietf-spring-sr-service-programming">
+        <front>
+          <title>Service Programming with Segment Routing</title>
+
+          <author initials="F. Clad., et al." surname="Ed">
+            <organization/>
+          </author>
+       
+          <date month="February" year="2025"/>
+        </front>
+
+        <seriesInfo name="" value="draft-ietf-spring-sr-service-programming"/>
+</reference>
+
+<reference anchor="draft-lbdd-cats-dp-sr">
+        <front>
+          <title>Computing-Aware Traffic Steering (CATS) Using Segment Routing</title>
+
+          <author initials="C., et al." surname="Li">
+            <organization/>
+          </author>
+       
+          <date month="January" year="2025"/>
+        </front>
+
+        <seriesInfo name="" value="draft-lbdd-cats-dp-sr"/>
+</reference>
+</references>  
+
+</back>
+</rfc>

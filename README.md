@@ -1,0 +1,1 @@
+# Additional CATS requirements consideration for Service Segmentation-related use cases
