@@ -419,16 +419,6 @@ L0:   M0  (...)  M0     M0  (...)  M0                   M0  (...)  M0     M0  (.
     </front>
 </reference>
 
-<reference anchor="ICTC-2025-Service-Pipeline-metrics" target="https://doi.org/TO-BE-UPDATED">
-  <front>
-    <title>Optimizing Service Segmentation with Aggregated Computing-Aware Traffic Steering Metrics</title>
-    <author initials="K. N." surname="Trung" />
-    <author initials="M.-N." surname="Tran" />
-    <author initials="Y." surname="Kim" />
-    <date month="January" year="2026" />
-  </front>
-</reference>
-
 <reference anchor="draft-ietf-cats-framework">
         <front>
           <title>A Framework for Computing-Aware Traffic Steering (CATS)</title>
