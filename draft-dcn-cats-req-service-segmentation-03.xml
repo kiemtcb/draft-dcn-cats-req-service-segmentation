@@ -316,27 +316,27 @@ the title) for use on http://www.rfc-editor.org/rfcsearch.html. -->
 
               <figure anchor="Fig-SPM" title="New CATS Metric Aggregation Level">
                 <artwork align="left" name="" type="" alt=""><![CDATA[
-                                    Service Pipeline Metrics
-                                            +------+
-                                            |  M3  |
-                                            +------+
-                                                |
-                     ---------------------------------------------------
-                     |                                                 |
-              +-------------+                                   +-------------+
-L2:           |    M2-A     |                                   |    M2-X     |
-              | (Subtask A) |              (  ...  )            | (Subtask X) |
-              +-------------+                                   +-------------+
-                     |                                                 |
-            -------------------                               -------------------
-            |                 |                               |                 |
-         +------+         +------+                         +------+         +------+
-L1:      | M1-A |  (...)  | M1-A |                         | M1-X |  (...)  | M1-X |
-         +------+         +------+                         +------+         +------+
-            |                 |                               |                 |
-       -----------       -----------                     -----------       -----------
-       |    |    |       |    |    |                     |    |    |       |    |    |
-L0:   M0  (...)  M0     M0  (...)  M0                   M0  (...)  M0     M0  (...)  M0
+                              Service Pipeline Metrics
+                                      +------+
+                                      |  M3  |
+                                      +------+
+                                          |
+                     -----------------------------------------
+                     |                                       |
+              +-------------+                         +-------------+
+L2:           |    M2-A     |                         |    M2-X     |
+              | (Subtask A) |         (  ...  )       | (Subtask X) |
+              +-------------+                         +-------------+
+                     |                                       |
+            -------------------                       -------------------
+            |                 |                       |                 |
+         +------+         +------+                 +------+         +------+
+L1:      | M1-A |  (...)  | M1-A |                 | M1-X |  (...)  | M1-X |
+         +------+         +------+                 +------+         +------+
+            |                 |                       |                 |
+       -----------       -----------             -----------       -----------
+       |    |    |       |    |    |             |    |    |       |    |    |
+L0:   M0  (...)  M0     M0  (...)  M0           M0  (...)  M0     M0  (...)  M0
                 ]]></artwork>
               </figure>
 
@@ -382,7 +382,7 @@ L0:   M0  (...)  M0     M0  (...)  M0                   M0  (...)  M0     M0  (.
             <organization/>
           </author>
        
-          <date month="February" year="2025"/>
+          <date month="February" year="2026"/>
         </front>
 
         <seriesInfo name="" value="draft-ietf-cats-usecases-requirements"/>
@@ -427,7 +427,7 @@ L0:   M0  (...)  M0     M0  (...)  M0                   M0  (...)  M0     M0  (.
             <organization/>
           </author>
        
-          <date month="February" year="2025"/>
+          <date month="February" year="2026"/>
         </front>
 
         <seriesInfo name="" value="draft-ietf-cats-framework"/>
@@ -441,7 +441,7 @@ L0:   M0  (...)  M0     M0  (...)  M0                   M0  (...)  M0     M0  (.
             <organization/>
           </author>
        
-          <date month="March" year="2025"/>
+          <date month="February" year="2026"/>
         </front>
 
         <seriesInfo name="" value="draft-ietf-cats-metric-definition"/>
@@ -451,11 +451,11 @@ L0:   M0  (...)  M0     M0  (...)  M0                   M0  (...)  M0     M0  (.
         <front>
           <title>Service Programming with Segment Routing</title>
 
-          <author initials="F. Clad., et al." surname="Ed">
+          <author initials="A. , et al." surname="Abdelsalam">
             <organization/>
           </author>
        
-          <date month="February" year="2025"/>
+          <date month="February" year="2026"/>
         </front>
 
         <seriesInfo name="" value="draft-ietf-spring-sr-service-programming"/>
@@ -469,7 +469,7 @@ L0:   M0  (...)  M0     M0  (...)  M0                   M0  (...)  M0     M0  (.
             <organization/>
           </author>
        
-          <date month="January" year="2025"/>
+          <date month="October" year="2025"/>
         </front>
 
         <seriesInfo name="" value="draft-lbdd-cats-dp-sr"/>
