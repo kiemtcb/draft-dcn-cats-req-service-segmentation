@@ -311,7 +311,43 @@ the title) for use on http://www.rfc-editor.org/rfcsearch.html. -->
           <ul spacing="normal">
             <li> CATS metrics can be aggregated not only by metric category (e.g., computing, networking) but also by individual service subtasks. For instance, the CATS metric representing a candidate combination of subtasks may be derived by aggregating the metrics of its component subtasks.  </li>
 
-            <li> One possible realization of such metric aggregation is <em>Service Pipeline Metrics</em>. In this approach, a pipeline-level CATS metric is derived by aggregating the Level 2 service-level metrics of all services within a pipeline into a single pipeline-level metric through an aggregation function, as demonstrated in <xref target="ICTC-2025-Service-Pipeline-metrics"/>. </li>
+            <li>
+              <t> One possible realization of such metric aggregation is <em>Service Pipeline Metrics</em>. </t>
+
+              <figure anchor="Fig-SPM" title="New CATS Metric Aggregation Level">
+                <artwork align="left" name="" type="" alt=""><![CDATA[
+                                    Service Pipeline Metrics
+                                            +------+
+                                            |  M3  |
+                                            +------+
+                                                |
+                     ---------------------------------------------------
+                     |                                                 |
+              +-------------+                                   +-------------+
+L2:           |    M2-A     |                                   |    M2-X     |
+              | (Subtask A) |              (  ...  )            | (Subtask X) |
+              +-------------+                                   +-------------+
+                     |                                                 |
+            -------------------                               -------------------
+            |                 |                               |                 |
+         +------+         +------+                         +------+         +------+
+L1:      | M1-A |  (...)  | M1-A |                         | M1-X |  (...)  | M1-X |
+         +------+         +------+                         +------+         +------+
+            |                 |                               |                 |
+       -----------       -----------                     -----------       -----------
+       |    |    |       |    |    |                     |    |    |       |    |    |
+L0:   M0  (...)  M0     M0  (...)  M0                   M0  (...)  M0     M0  (...)  M0
+                ]]></artwork>
+              </figure>
+
+              <t>
+                The model organizes CATS-related measurements into multiple levels of abstraction.
+                Level 0 (L0) metrics capture primitive measurements (e.g., resource, traffic, or system observations).
+                Level 1 (L1) metrics are derived from L0 metrics to represent service-relevant aspects at a finer granularity.
+                Level 2 (L2) metrics summarize the overall capability or suitability of each subtask (or subtask instance) by aggregating its L1 metrics.
+                Finally, a pipeline-level metric (denoted as M3) is computed by aggregating the L2 metrics across all subtasks in a candidate pipeline, yielding a single score that can be used to compare candidate pipelines.
+              </t>
+            </li>
 
             <li> Aggregating metrics at the pipeline level can also reduce control-plane signaling overhead by avoiding the need to disseminate fine-grained metrics for each individual service replica. This consideration becomes increasingly important in large-scale 6G deployments, where the number of service replicas within a metro-area cell may grow to the order of hundreds. </li>
           </ul>
