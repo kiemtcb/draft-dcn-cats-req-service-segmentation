@@ -256,7 +256,7 @@ the title) for use on http://www.rfc-editor.org/rfcsearch.html. -->
             <li> The client sends an ML inference request via its connected network to the ML application platform.</li>
             <li> The ML application platform determines that the request should be processed by the Vertical ML model partitioning pipeline. </li>
             <li> The CATS-PS determines the optimal subtask composition for a vertically partitioned machine learning (ML) model pipeline and selects the most suitable instance for each subtask to steer the request. For example, in <xref target="Fig-ML"/>, the ML model is partitioned into two vertical slices: Model Slice 1 is deployed at Service Site 1, and Model Slice 2 is deployed at Service Site 3.</li>
-            <li> The CATS Path Selector (CATS-PS) communicates its pipeline decision to the ML application platform. The platform then pre-processes the client’s inference input into two smaller input slices, based on the input dimensions required by each model slice. </li>
+            <li> The CATS Path Selector (CATS-PS) communicates its pipeline decision to the ML application platform. The platform then pre-processes the client's inference input into two smaller input slices, based on the input dimensions required by each model slice. </li>
             <li> Each input slice is forwarded in parallel to its corresponding model slice instance at the designated locations (Site 1 and Site 3). </li>
             <li> Once the processed outputs are returned from each model slice, the ML application platform merges them to produce the final ML inference result, which is then returned to the client.</li>
           </ul>
